@@ -1,0 +1,126 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider             = "postgresql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+// model Product {
+//   id          Int       @id @default(autoincrement())
+//   name        String
+//   description String
+//   price       Decimal
+//   image       String
+//   category    Category? @relation(fields: [category_id], references: [id])
+//   category_id Int
+
+//   @@index([category_id])
+// }
+
+// model Category {
+//   id          Int       @id @default(autoincrement())
+//   name        String
+//   description String
+//   products    Product[]
+// }
+
+model Airport {
+  ident             String @id @default(uuid()) @db.VarChar(7)
+  type              String @db.VarChar(15)
+  name              String @db.Text()
+  latdeg            Float
+  longdeg           Float
+  elevft            Int
+  continent         String @db.VarChar(2)
+  isocountry        String @db.VarChar(2)
+  isoregion         String @db.VarChar(7)
+  city              String @db.Text()
+  scheduled_service String @db.VarChar(3)
+  gpscode           String @db.VarChar(4)
+  iatacode          String @db.VarChar(3)
+  localcode         String @db.VarChar(7)
+  homelink          String @db.Text()
+  wikipedialink     String @db.Text()
+  keywords          String @db.Text()
+}
+
+model Circuit {
+  circuitid  Int    @id @default(autoincrement())
+  circuitref String
+  name       String
+  location   String
+  country    String
+  lat        Float
+  lng        Float
+  alt        Float?
+  url        String
+
+  @@map("circuits")
+}
+
+model Constructor {
+  constructorid  Int    @id @default(autoincrement())
+  constructorref String
+  name           String
+  nationality    String
+  url            String
+  
+  @@map("constructors")
+  
+}
+
+model Country {
+  code      String @id
+  name      String
+  continent String
+  keywords  String
+  
+  @@map("countries")
+}
+
+model Driver {
+  driverid       Int              @id
+  driverref      String
+  number         Int
+  code           String
+  forename       String
+  surname        String
+  dob            DateTime
+  nationality    String
+  url            String
+  DriverStanding DriverStanding[]
+  
+  @@map("driver")
+}
+
+model Race {
+  raceid         Int              @id @default(autoincrement())
+  year           Int
+  round          Int
+  circuitid      Int
+  name           String
+  date           DateTime
+  time           String
+  url            String
+  DriverStanding DriverStanding[]
+  
+  @@map("races")
+}
+
+model DriverStanding {
+  driverstandingsid Int    @id @default(autoincrement())
+  raceid            Int
+  driverid          Int
+  points            Float
+  position          Int
+  positiontext      String
+  wins              Int
+  driver            Driver @relation(fields: [driverid], references: [driverid])
+  race              Race   @relation(fields: [raceid], references: [raceid])
+  
+  @@map("driverstandings")
+}
