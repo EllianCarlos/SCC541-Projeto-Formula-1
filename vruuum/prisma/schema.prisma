@@ -230,12 +230,12 @@ model Status {
   @@map("status")
 }
 
-model Login {
+model User {
   userId     Int    @id
   login      String
   password   String
   tipo       String
   idoriginal Int
 
-  @@map("login")
+  @@map("Users")
 }
