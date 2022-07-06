@@ -21,8 +21,7 @@ export default async function handler(
       }
 
       const queryResult = query[0] as any;
-      const idoriginal = Number(queryResult.idoriginal);
-      console.log(idoriginal)
+      const idoriginal = Number(queryResult!.idoriginal);
 
       const data =
         await prismaClient.$queryRaw`SELECT nome_status, CAST(quantidade AS int) FROM lista_status(CAST('Escuderia' AS TEXT), CAST(${idoriginal} AS INTEGER));`;

@@ -6,7 +6,7 @@ CREATE table pilotos_e_escuderias AS
     group by d.driverid ,r.constructorid;
 
 CREATE INDEX IdxPilotoseEscuderias
-ON pilotos_e_escuderias ("name");
+ON pilotos_e_escuderias ("forename");
 
 CREATE OR REPLACE FUNCTION lista_pilotos(IN NomeEscuderia INT)
 RETURNS TABLE (Nome TEXT, Sobrenome TEXT, Numero_Podios BIGINT)

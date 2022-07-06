@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import styles from "styles/Table.module.css";
 
-const RegisterTeam: NextPage = () => {
+const Overview: NextPage = () => {
   const [cookies] = useCookies();
   const [report, setReport] = useState(<p>Gerando Relatório...</p>);
   const [tipo, setTipo] = useState("tipo");
@@ -17,7 +17,7 @@ const RegisterTeam: NextPage = () => {
       login: username,
       type: tipo,
     };
-    const endpoint = "/api/team-status-report?" + new URLSearchParams(data);
+    const endpoint = "/api/team-report?" + new URLSearchParams(data);
 
     const options = {
       method: "GET",
@@ -28,14 +28,15 @@ const RegisterTeam: NextPage = () => {
 
     fetch(endpoint, options).then(async (value: any) => {
       const response = await value.json();
-      
+
       setReport(
         response.map((value: any) => {
           return (
             <>
               <tr className={styles.boderTable}>
-                <td className={styles.boderRow}>{value.nome_status}</td>
-                <td className={styles.boderRow}>{value.quantidade}</td>
+                <td className={styles.boderRow}>{value.forename}</td>
+                <td className={styles.boderRow}>{value.surname}</td>
+                <td className={styles.boderRow}>{value.count}</td>
               </tr>
             </>
           );
@@ -43,15 +44,15 @@ const RegisterTeam: NextPage = () => {
       );
     });
   }, [tipo, username]);
-
   return (
     <>
       <Header></Header>
       <h2>Relatório de Status</h2>
       <table className={styles.boderTable}>
         <tr className={styles.boderTable}>
-          <th className={styles.boderRow}>Status</th>
-          <th className={styles.boderRow}>Quantidade</th>
+          <th className={styles.boderRow}>Primeiro Nome</th>
+          <th className={styles.boderRow}>Segundo Nome</th>
+          <th className={styles.boderRow}>Vitórias</th>
         </tr>
         {report}
       </table>
@@ -61,4 +62,4 @@ const RegisterTeam: NextPage = () => {
   );
 };
 
-export default RegisterTeam;
+export default Overview;

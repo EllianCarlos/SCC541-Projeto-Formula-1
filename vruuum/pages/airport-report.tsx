@@ -60,12 +60,12 @@ const RegisterTeam: NextPage = () => {
       </form>
       <table className={styles.boderTable}>
         <tr className={styles.boderTable}>
-          <th className={styles.boderRow}>nomecidade</th>
-          <th className={styles.boderRow}>iata_code</th>
-          <th className={styles.boderRow}>nome_aeroporto</th>
-          <th className={styles.boderRow}>cidade_aeroporto</th>
-          <th className={styles.boderRow}>distancia_c_a</th>
-          <th className={styles.boderRow}>tipo_aeroporto</th>
+          <th className={styles.boderRow}>Cidade</th>
+          <th className={styles.boderRow}>IATA</th>
+          <th className={styles.boderRow}>Nome do Aeroporto</th>
+          <th className={styles.boderRow}>Cidade do Aeroporto</th>
+          <th className={styles.boderRow}>Distância</th>
+          <th className={styles.boderRow}>Tipo do Aeroporto</th>
         </tr>
         {report}
       </table>

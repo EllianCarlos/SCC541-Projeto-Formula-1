@@ -24,7 +24,8 @@ const GetByForename: NextPage = () => {
       const json = await response.json();
       console.log(json);
       const str = JSON.stringify(json, null, 2);
-      setPiloto(Object.values(json).map((v) => <td>{v}</td>));
+      const objs = Object.values(json).map((v: any) => <td key={String(v)}>{v}</td>);
+      setPiloto(<>{objs}</>);
     });
   };
 
@@ -45,14 +46,14 @@ const GetByForename: NextPage = () => {
       </form>
       <table className={styles.boderTable}>
         <tr className={styles.boderTable}>
-          <th className={styles.boderRow}>driverid</th>
-          <th className={styles.boderRow}>driverref</th>
-          <th className={styles.boderRow}>number</th>
-          <th className={styles.boderRow}>code</th>
-          <th className={styles.boderRow}>forename</th>
-          <th className={styles.boderRow}>surname</th>
-          <th className={styles.boderRow}>dob</th>
-          <th className={styles.boderRow}>nationality</th>
+          <th className={styles.boderRow}>Id</th>
+          <th className={styles.boderRow}>Driver Ref</th>
+          <th className={styles.boderRow}>Número</th>
+          <th className={styles.boderRow}>Código</th>
+          <th className={styles.boderRow}>Primeiro Nome</th>
+          <th className={styles.boderRow}>Segundo Nome</th>
+          <th className={styles.boderRow}>Data de Nascimento</th>
+          <th className={styles.boderRow}>Nacionalidade</th>
           <th className={styles.boderRow}>url</th>
         </tr>
         <tr className={styles.boderRow}>{piloto}</tr>
