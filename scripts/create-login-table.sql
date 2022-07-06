@@ -1,4 +1,3 @@
-DROP TABLE Users;
 CREATE Table if not exists USERS(
     Userid integer primary key,
     Login VARCHAR(50) unique,
@@ -23,9 +22,8 @@ BEGIN
     END IF;
 RETURN NEW;
 END;
-$$
+$$;
 
-drop trigger VerPiloto on users;
 
 CREATE TRIGGER VerPiloto
 AFTER INSERT ON users
@@ -33,7 +31,6 @@ FOR EACH row
 when(new.tipo is null)
 EXECUTE PROCEDURE VerificaPiloto();
 
-delete from users;
 
 insert into users(Userid,Login,Password,IdOriginal)
 select row_number() over(order by driverid ASC),driverref,MD5(driverref),driverid 
@@ -41,4 +38,6 @@ from driver;
 
 insert into users(Userid,Login,Password,IdOriginal)
 select row_number() over(order by constructorid ASC)+10000,constructorref,MD5(constructorref),constructorid 
-from constructors
+from constructors;
+
+insert into users(Userid,Login,Password,tipo,IdOriginal) VALUES (0, 'admin', MD5('admin'),'Administrador', 0)
