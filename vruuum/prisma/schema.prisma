@@ -195,17 +195,17 @@ model Results {
   raceid          Int
   driverid        Int
   constructorid   Int
-  number          Int
-  grid            Int
+  number          Int?
+  grid            Int?
   position        Int?
-  positiontext    Int
-  positionorder   Int
-  points          Int
-  laps            Int
+  positiontext    Int?
+  positionorder   Int?
+  points          Int?
+  laps            Int?
   time            Int?
   milliseconds    Int?
   fastestlap      Int?
-  rank            Int
+  rank            Int?
   fastestlaptime  String?
   fastestlapspeed String?
   statusid        Int?
@@ -228,4 +228,14 @@ model Status {
   status   String?
 
   @@map("status")
+}
+
+model Login {
+  userId     Int    @id
+  login      String
+  password   String
+  tipo       String
+  idoriginal Int
+
+  @@map("login")
 }

@@ -4,10 +4,7 @@ import type { NextPage } from "next";
 import { PrismaClient } from "@prisma/client";
 
 const Overview: NextPage = () => {
-  let prismaClient = prisma as PrismaClient;
-
   const handleLogin = (e: any) => {
-    prismaClient.$queryRaw`SELECT * FROM`
   }
 
 
@@ -20,3 +17,13 @@ const Overview: NextPage = () => {
 };
 
 export default Overview;
+
+export async function getStaticProps(_context: any) {
+  let prismaClient = prisma as PrismaClient;
+  const data = await prismaClient.$queryRaw`SELECT * FROM circuits`;
+
+
+  return {
+    props: { data }
+  }
+}
