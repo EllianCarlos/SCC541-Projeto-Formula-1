@@ -6,8 +6,6 @@ import UserActions from "../components/user-actions";
 const Overview: NextPage = () => {
   let username = "Admin";
 
-  
-
   return (
     <main className={styles.container}>
       <h2>{username}</h2>
