@@ -4,8 +4,9 @@ import { useRouter } from "next/router";
 const HomeButton: FC<any> = () => {
   const router = useRouter();
 
-  const handleClick = (e: MouseEventHandler<HTMLButtonElement>) => {
-    router.push("/");
+  const handleClick = (e: any) => {
+    e.preventDefault();
+    router.push("overview");
   };
   
   return <button type="submit" onClick={handleClick}>Voltar para o Inicio</button>;
