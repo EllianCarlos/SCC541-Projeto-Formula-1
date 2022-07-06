@@ -17,12 +17,12 @@ const Home: NextPage = () => {
 export default Home;
 
 // Exemplo de como fazer as queries no banco
-export async function getStaticProps(_context: any) {
-  let prismaClient = prisma as PrismaClient;
-  const data = await prismaClient.$queryRaw`SELECT * FROM circuits`;
+// export async function getStaticProps(_context: any) {
+//   let prismaClient = prisma as PrismaClient;
+//   const data = await prismaClient.$queryRaw`SELECT * FROM circuits`;
 
 
-  return {
-    props: { data }
-  }
-}
+//   return {
+//     props: { data }
+//   }
+// }

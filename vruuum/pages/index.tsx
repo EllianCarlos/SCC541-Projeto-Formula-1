@@ -17,13 +17,3 @@ const Overview: NextPage = () => {
 };
 
 export default Overview;
-
-export async function getStaticProps(_context: any) {
-  let prismaClient = prisma as PrismaClient;
-  const data = await prismaClient.$queryRaw`SELECT * FROM circuits`;
-
-
-  return {
-    props: { data }
-  }
-}
