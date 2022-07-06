@@ -5,14 +5,14 @@ import { useState } from "react";
 import styles from "styles/Table.module.css";
 
 const RegisterTeam: NextPage = () => {
-  const [report, setReport] = useState(<p>Gerando Relatório...</p>);
+  const [report, setReport] = useState(<td>Gerando Relatório...</td>);
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
     const data = {
-      cityName: event.target.cityName.value,
+      cityName: encodeURIComponent(event.target.cityName.value),
     };
-    const endpoint = "/api/airport-report?" + new URLSearchParams(data);
+    const endpoint = "/api/city-report?" + new URLSearchParams(data);
 
     const options = {
       method: "GET",
@@ -22,12 +22,10 @@ const RegisterTeam: NextPage = () => {
     };
 
     fetch(endpoint, options).then(async (value: any) => {
-      console.log(value);
       const response = await value.json();
-      console.log(response);
 
       setReport(
-        response.map((value: any) => {
+        response.data.map((value: any) => {
           return (
             <>
               <tr className={styles.boderTable}>
@@ -46,7 +44,7 @@ const RegisterTeam: NextPage = () => {
   };
 
   return (
-    <>
+    <div>
       <Header></Header>
       <h2>Relatório de Aeroportos e Cidades</h2>
       <form onSubmit={handleSubmit}>
@@ -73,7 +71,7 @@ const RegisterTeam: NextPage = () => {
       </table>
       <br />
       <HomeButton></HomeButton>
-    </>
+    </div>
   );
 };
 

@@ -14,17 +14,12 @@ export default async function handler(
       let prismaClient = prisma as PrismaClient;
 
       if (forename) {
-        const queryString = String(
-          `SELECT * FROM driver WHERE UPPER(forename) = UPPER('${String(
-            forename
-          ).trim()}') LIMIT 1;`
-        );
+        const queryString = String();
 
-        const query = (await prismaClient.$queryRaw(
-          Prisma.sql`SELECT forename FROM public.driver d WHERE d.forename = '${String(
+        const query =
+          (await prismaClient.$queryRaw`SELECT * FROM driver WHERE UPPER(forename) = UPPER(${String(
             forename
-          ).trim()}';`
-        )) as any;
+          ).trim()}) LIMIT 1;`) as any;
 
         console.log(query);
         if (query.length < 0 || query.length > 1) {

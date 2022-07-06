@@ -75,26 +75,43 @@ const UserActions: FC<void> = () => {
     );
   }
 
+  const generateTeamReport = (e: any) => {
+    router.push("team-report");
+  };
+
+  const generateTeamStatusReport = (e: any) => {
+    router.push("team-status-report");
+  };
+
   if (tipo === tipos.ESCUDERIA) {
     reports = (
       <>
-      <button type="submit" onClick={registerTeamHandler}>
+      <button type="submit" onClick={generateTeamReport}>
         Gerar Relatório de seus pilotos
       </button>
-        <button type="submit" onClick={registerTeamHandler}>
+        <button type="submit" onClick={generateTeamStatusReport}>
           Gerar Relatório de seus status
         </button>
       </>
     );
   }
 
+
+  const generatePilotReport = (e: any) => {
+    router.push("pilot-report");
+  };
+
+  const generatePilotStatusReport = (e: any) => {
+    router.push("pilot-status-report");
+  };
+
   if (tipo === tipos.PILOTO) {
     reports = (
       <>
-      <button type="submit" onClick={registerTeamHandler}>
+      <button type="submit" onClick={generatePilotReport}>
         Gerar Relatório de vitórias
       </button>
-        <button type="submit" onClick={registerTeamHandler}>
+        <button type="submit" onClick={generatePilotStatusReport}>
           Gerar Relatório de seus status
         </button>
       </>
