@@ -9,6 +9,7 @@ const Login: FC<any> = () => {
         <form action="">
           <input type="text" name="Login" id="Login" placeholder="Login" />
           <input type="text" name="Senha" id="Senha" placeholder="Senha" />
+          <br />
           <button type="submit">Enviar</button>
         </form>
       </main>

@@ -1,28 +1,22 @@
-import type { NextPage } from "next";
 import Header from "@/components/header";
-import Overview from "@/pages/overview";
-import prisma from "@/lib/prisma";
+import Login from "@/components/login";
+import type { NextPage } from "next";
 import { PrismaClient } from "@prisma/client";
 
-const Home: NextPage = () => {  
+const Overview: NextPage = () => {
+  let prismaClient = prisma as PrismaClient;
+
+  const handleLogin = (e: any) => {
+    prismaClient.$queryRaw`SELECT * FROM`
+  }
+
+
   return (
-    <div>
+    <>
       <Header></Header>
-      {/* <Login></Login> */}
-      <Overview></Overview>
-    </div>
+      <Login></Login>
+    </>
   );
 };
 
-export default Home;
-
-// Exemplo de como fazer as queries no banco
-export async function getStaticProps(_context: any) {
-  let prismaClient = prisma as PrismaClient;
-  const data = await prismaClient.$queryRaw`SELECT * FROM circuits`;
-
-
-  return {
-    props: { data }
-  }
-}
+export default Overview;
