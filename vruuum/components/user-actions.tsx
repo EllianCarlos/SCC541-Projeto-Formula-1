@@ -25,10 +25,6 @@ const UserActions: FC<void> = () => {
     router.push("register-pilot");
   };
 
-  const getPilotHandler = (e: any) => {
-    router.push("get-pilot");
-  };
-
   const getByForename = (e: any) => {
     router.push("get-by-forename");
   };
@@ -43,7 +39,6 @@ const UserActions: FC<void> = () => {
         <button type="submit" onClick={registerPilotHandler}>
           Cadastrar Piloto
         </button>
-        <button type="submit" onClick={getPilotHandler}>Consultar Piloto</button>
       </>
     );
   }

@@ -106,11 +106,35 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+drop trigger insere_users_t on users;
 -------------------------------------------------------------------------------
 
 -- Exemplo de relatório 1
-SELECT * FROM lista_status('Administrador', 1);
+-- SELECT * FROM lista_status('Administrador', 1);
 -- Exemplo de relatório 4
-SELECT * FROM lista_status('Escuderia', 1);
+-- SELECT * FROM lista_status('Escuderia', 1);
 -- Exemplo de relatório 6
-SELECT * FROM lista_status('Piloto', 1);
+-- SELECT * FROM lista_status('Piloto', 1);
+
+
+CREATE table pilotos_e_escuderias AS
+    select d.forename, d.surname, count(r.position), r.constructorid from driver d
+    left join results r
+    on d.driverid=r.driverid
+    where r.position=1
+    group by d.driverid ,r.constructorid;
+
+
+CREATE INDEX IdxPilotoseEscuderias
+ON pilotos_e_escuderias ("name");
+
+CREATE OR REPLACE FUNCTION lista_pilotos(IN NomeEscuderia INT)
+RETURNS TABLE (Nome TEXT, Sobrenome TEXT, Numero_Podios BIGINT)
+AS $$
+BEGIN
+    RETURN QUERY
+        select e.forename,e.surname,  e.count from pilotos_e_escuderias e
+        where e.constructorid= NomeEscuderia
+        order by e.forename ASC;
+END;
+$$ LANGUAGE plpgsql;
