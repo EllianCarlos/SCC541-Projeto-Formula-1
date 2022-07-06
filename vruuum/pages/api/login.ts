@@ -9,11 +9,8 @@ export default async function handler(
 ): Promise<void> {
   if (req.method === "POST") {
     try {
-      console.log(req.body);
       const login = req.body.login;
       const password = req.body.password;
-      console.log(login);
-      console.log(password);
 
       let prismaClient = prisma as PrismaClient;
       const query: any[] =
