@@ -9,25 +9,6 @@ datasource db {
   referentialIntegrity = "prisma"
 }
 
-// model Product {
-//   id          Int       @id @default(autoincrement())
-//   name        String
-//   description String
-//   price       Decimal
-//   image       String
-//   category    Category? @relation(fields: [category_id], references: [id])
-//   category_id Int
-
-//   @@index([category_id])
-// }
-
-// model Category {
-//   id          Int       @id @default(autoincrement())
-//   name        String
-//   description String
-//   products    Product[]
-// }
-
 model Airport {
   ident             String @id @default(uuid()) @db.VarChar(7)
   type              String @db.VarChar(15)
@@ -50,27 +31,29 @@ model Airport {
 
 model Circuit {
   circuitid  Int    @id @default(autoincrement())
-  circuitref String
-  name       String
+  circuitref String @unique
+  name       String @unique
   location   String
   country    String
   lat        Float
   lng        Float
   alt        Float?
   url        String
+  Race       Race[]
 
   @@map("circuits")
 }
 
 model Constructor {
-  constructorid  Int    @id @default(autoincrement())
+  constructorid  Int          @id @default(autoincrement())
   constructorref String
   name           String
   nationality    String
-  url            String
-  
+  url            String?
+  Qualifying     Qualifying[]
+  Results        Results[]
+
   @@map("constructors")
-  
 }
 
 model Country {
@@ -78,7 +61,7 @@ model Country {
   name      String
   continent String
   keywords  String
-  
+
   @@map("countries")
 }
 
@@ -93,7 +76,11 @@ model Driver {
   nationality    String
   url            String
   DriverStanding DriverStanding[]
-  
+  Laptimes       Laptimes[]
+  Pitstops       Pitstops[]
+  Qualifying     Qualifying[]
+  Results        Results[]
+
   @@map("driver")
 }
 
@@ -107,7 +94,12 @@ model Race {
   time           String
   url            String
   DriverStanding DriverStanding[]
-  
+  Laptimes       Laptimes[]
+  Pitstops       Pitstops[]
+  Qualifying     Qualifying[]
+  circuit        Circuit          @relation(fields: [circuitid], references: [circuitid])
+
+  Results Results[]
   @@map("races")
 }
 
@@ -121,6 +113,119 @@ model DriverStanding {
   wins              Int
   driver            Driver @relation(fields: [driverid], references: [driverid])
   race              Race   @relation(fields: [raceid], references: [raceid])
-  
+
   @@map("driverstandings")
+}
+
+model GeoCity {
+  geonameid      String @id
+  name           String
+  asciiname      String
+  alternatenames String
+  lat            Float
+  long           Float
+  featureclass   String
+  featurecode    String
+  country        String
+  cc2            String
+  admin1code     String
+  admin2code     String
+  admin3code     String
+  admin4code     String
+  population     String
+  elevation      String
+  dem            String
+  timezone       String
+  modification   String
+
+  @@map("geocities15k")
+}
+
+model Laptimes {
+  raceid       Int
+  driverid     Int
+  lap          Int
+  position     Int
+  time         String
+  milliseconds Int
+  driver       Driver     @relation(fields: [driverid], references: [driverid])
+  race         Race       @relation(fields: [raceid], references: [raceid])
+  Pitstops     Pitstops[]
+
+  @@id([raceid, driverid, lap])
+  @@map("laptimes")
+}
+
+model Pitstops {
+  raceid       Int
+  driverid     Int
+  stop         Int
+  lap          Int
+  time         String
+  duration     String
+  milliseconds Int
+  driver       Driver   @relation(fields: [driverid], references: [driverid])
+  race         Race     @relation(fields: [raceid], references: [raceid])
+  laptimes     Laptimes @relation(fields: [driverid, raceid, lap], references: [driverid, raceid, lap])
+
+  @@id([raceid, driverid, stop])
+  @@map("pitstops")
+}
+
+model Qualifying {
+  qualifyid     Int         @id
+  raceid        Int
+  driverid      Int
+  constructorid Int
+  number        Int
+  position      Int
+  q1            String?
+  q2            String?
+  q3            String?
+  pole_position String
+  driver        Driver      @relation(fields: [driverid], references: [driverid])
+  race          Race        @relation(fields: [raceid], references: [raceid])
+  constructor   Constructor @relation(fields: [constructorid], references: [constructorid])
+
+  @@map("qualifying")
+}
+
+model Results {
+  resultid        Int         @id
+  raceid          Int
+  driverid        Int
+  constructorid   Int
+  number          Int
+  grid            Int
+  position        Int?
+  positiontext    Int
+  positionorder   Int
+  points          Int
+  laps            Int
+  time            Int?
+  milliseconds    Int?
+  fastestlap      Int?
+  rank            Int
+  fastestlaptime  String?
+  fastestlapspeed String?
+  statusid        Int?
+  driver          Driver      @relation(fields: [driverid], references: [driverid])
+  race            Race        @relation(fields: [raceid], references: [raceid])
+  constructor     Constructor @relation(fields: [constructorid], references: [constructorid])
+
+  @@map("results")
+}
+
+model Seasons {
+  year Int    @id
+  url  String
+
+  @@map("seasons")
+}
+
+model Status {
+  statusid Int     @id
+  status   String?
+
+  @@map("status")
 }
