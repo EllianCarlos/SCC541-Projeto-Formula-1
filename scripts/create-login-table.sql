@@ -1,43 +1,28 @@
-CREATE Table if not exists USERS(
-    Userid integer primary key,
-    Login VARCHAR(50) unique,
-    Password VARCHAR(50) Not NULL,
-    Tipo VARCHAR(25),
-    IdOriginal integer Not NULL
+CREATE TABLE users (
+    userid SERIAL NOT NULL,
+    login TEXT NOT NULL,
+    password TEXT NOT NULL, -- Lembrando que será usado a função MD5
+    tipo TEXT NOT NULL,
+    idoriginal INTEGER NOT NULL,
+
+    CONSTRAINT PK_users PRIMARY KEY (userid),
+    CONSTRAINT CK_tipo CHECK (tipo IN ('Administrador', 'Escuderia', 'Piloto'))
 );
 
-CREATE OR REPLACE FUNCTION VerificaPiloto() 
-RETURNS trigger LANGUAGE plpgsql
+-- Copia para a tabela users os dados já existentes nas outras tabelas
+CREATE OR REPLACE PROCEDURE popula_users()
 AS $$
 BEGIN
-      
-    IF ((SELECT count(driverref) FROM driver where driverref = NEW.login) = 1 and new.userid<10000) THEN
-    update users
-    set tipo='Piloto', login=concat(new.login,'_d')
-    where login=new.login;
-    ELSEIF((SELECT count(constructorref) FROM constructors where constructorref = NEW.login) = 1 and new.userid>10000) THEN
-    update users
-    set tipo='Escuderia',login=concat(new.login,'_c')
-    where login=new.login;
-    END IF;
-RETURN NEW;
+    INSERT INTO users(login, password, tipo, idoriginal)
+        VALUES ('admin', MD5('admin'), 'Administrador', 1);
+    INSERT INTO users(login, password, tipo, idoriginal)
+        SELECT concat(constructorref, '_c') , MD5(constructorref), 'Escuderia' tipo, constructorid
+        FROM constructors;
+    INSERT INTO users(login, password, tipo, idoriginal)
+        SELECT concat(driverref, '_d') , MD5(driverref), 'Piloto' tipo, driverid
+        FROM driver;
 END;
-$$;
+$$ LANGUAGE plpgsql;
 
-
-CREATE TRIGGER VerPiloto
-AFTER INSERT ON users
-FOR EACH row
-when(new.tipo is null)
-EXECUTE PROCEDURE VerificaPiloto();
-
-
-insert into users(Userid,Login,Password,IdOriginal)
-select row_number() over(order by driverid ASC),driverref,MD5(driverref),driverid 
-from driver;
-
-insert into users(Userid,Login,Password,IdOriginal)
-select row_number() over(order by constructorid ASC)+10000,constructorref,MD5(constructorref),constructorid 
-from constructors;
-
-insert into users(Userid,Login,Password,tipo,IdOriginal) VALUES (0, 'admin', MD5('admin'),'Administrador', 0)
+-- Faz a população da tabela
+CALL popula_users();
